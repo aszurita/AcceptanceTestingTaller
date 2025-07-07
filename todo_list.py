@@ -1,41 +1,46 @@
-class Task:
-    def __init__(self, name, status="Pending", priority="Normal", due_date=None):
-        self.name = name
-        self.status = status
-        self.priority = priority
-        self.due_date = due_date
+# todo_list.py
+from todo_data import ToDoList
 
-    def complete(self):
-        self.status = "Completed"
+todo = ToDoList()
 
-    def __str__(self):
-        return f"{self.name} [{self.status}]"
+def show_menu():
+    print("\n1. Add Task")
+    print("2. List Tasks")
+    print("3. Mark Task Completed")
+    print("4. Clear All Tasks")
+    print("5. Remove Task")
+    print("6. Exit")
 
+while True:
+    show_menu()
+    choice = input("Choose an option: ")
 
-class ToDoList:
-    def __init__(self):
-        self.tasks = []
+    if choice == "1":
+        title = input("Title: ")
+        description = input("Description: ")
+        priority = input("Priority: ")
+        due_date = input("Due Date: ")
+        todo.add_task(title, description, priority, due_date)
 
-    def add_task(self, name):
-        self.tasks.append(Task(name))
+    elif choice == "2":
+        tasks = todo.list_tasks()
+        for task in tasks:
+            status = "Done" if task.completed else "Pending"
+            print(f"- {task.title} | {status} | {task.description} | Priority: {task.priority} | Due: {task.due_date}")
 
-    def list_tasks(self):
-        return [str(task) for task in self.tasks]
+    elif choice == "3":
+        title = input("Title to mark completed: ")
+        todo.mark_task_completed(title)
 
-    def complete_task(self, name):
-        for task in self.tasks:
-            if task.name == name:
-                task.complete()
+    elif choice == "4":
+        todo.clear_tasks()
 
-    def clear_tasks(self):
-        self.tasks = []
+    elif choice == "5":
+        title = input("Title to remove: ")
+        todo.remove_task(title)
 
-    def is_empty(self):
-        return len(self.tasks) == 0
+    elif choice == "6":
+        break
 
-    def get_task(self, name):
-        return next((task for task in self.tasks if task.name == name), None)
-
-
-# Singleton for testing
-todo_list = ToDoList()
+    else:
+        print("Invalid option.")
